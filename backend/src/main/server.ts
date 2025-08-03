@@ -4,6 +4,7 @@ import cors from "cors";
 import { config } from "../config/config";
 import { connectDB } from "../infrastructure/database/db";
 import { errorHandler } from "../interface/middlewares/error.middleware";
+import { nodeRoutes } from "../interface/routes/node.routes";
 
 const app: Application = express();
 const PORT: number = config.PORT;
@@ -24,7 +25,6 @@ app.use(
     credentials: config.CORS.CREDENTIALS,
   })
 );
-app.set('trust proxy', true);
 
 //test api
 app.get("/", (req: Request, res: Response) => {
@@ -33,6 +33,9 @@ app.get("/", (req: Request, res: Response) => {
     message: "API is working",
   });
 });
+
+//routes
+app.use("/api/node", nodeRoutes);
 
 //error handling middleware
 app.use(errorHandler);
