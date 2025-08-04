@@ -5,4 +5,5 @@ export interface INodeTreeRepository {
   getAllNodes(): Promise<INode[]>;
   getNodeById(id: string): Promise<INode | null>;
   findNodeByName(name: string): Promise<INode | null>;
+  findByParentIdAndUpdate(parentId: string, savedNodeId: string): Promise<void>;
 }

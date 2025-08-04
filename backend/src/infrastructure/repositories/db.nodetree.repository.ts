@@ -3,7 +3,13 @@ import { INode, NodeModel } from "../models/node.model";
 
 export class DBNodeTreeRepository implements INodeTreeRepository {
   async createNode(name: string, parentId?: string | null): Promise<INode> {
-    return await NodeModel.create({ name, parentId });
+    const newNode = new NodeModel({
+      name: name.trim(),
+      parentId: parentId || null,
+      children: [],
+    });
+
+    return await newNode.save();
   }
 
   async getAllNodes(): Promise<INode[]> {
@@ -16,5 +22,16 @@ export class DBNodeTreeRepository implements INodeTreeRepository {
 
   async findNodeByName(name: string): Promise<INode | null> {
     return NodeModel.findOne({ name });
+  }
+
+  async findByParentIdAndUpdate(
+    parentId: string,
+    savedNodeId: string
+  ): Promise<void> {
+    await NodeModel.findByIdAndUpdate(
+      parentId,
+      { $push: { children: savedNodeId } },
+      { new: true }
+    );
   }
 }
