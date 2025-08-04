@@ -25,6 +25,15 @@ class NodeController {
       next(error);
     }
   }
+
+  async getNodeTree(req: Request, res: Response, next: NextFunction) {
+    try {
+      const tree = await NodeTreeDIContainer.getNodeTreeUseCase().execute();
+      res.status(HttpStatus.OK).json({ success: true, data: tree });
+    } catch (error: any) {
+      next(error);
+    }
+  }
 }
 
 export const nodeController = new NodeController();
