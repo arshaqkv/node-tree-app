@@ -3,6 +3,7 @@ import type { TreeNode } from "../types";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  Loader2,
   PencilLineIcon,
   Plus,
   Trash2,
@@ -112,7 +113,7 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
   return (
     <div className="select-none">
       <div
-        className="group flex my-2 items-center py-3 px-2 border border-gray-200 hover:bg-gray-100 rounded-md cursor-pointer transition-colors duration-150"
+        className="group flex my-2 dark:bg-gray-900 items-center py-3 px-2 border border-gray-200 hover:bg-gray-100 rounded-md cursor-pointer transition-colors duration-150"
         style={{ paddingLeft: `${8 + indentLevel}px` }}
         onClick={handleToggleExpand}
       >
@@ -152,7 +153,7 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
             </form>
           ) : (
             <span
-              className="text-gray-800 text-sm font-medium truncate cursor-pointer"
+              className="text-gray-800 dark:text-gray-200 text-sm font-medium truncate cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
               {node.name}
@@ -160,7 +161,7 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
           )}
           <button
             onClick={() => setIsEditing(true)}
-            className="p-1 text-gray-500 cursor-pointer hover:text-gray-700  rounded transition-colors"
+            className="p-1 text-gray-500 opacity-0 group-hover:opacity-100 dark:text-gray-100 cursor-pointer hover:text-gray-700  rounded transition-colors"
             disabled={isLoading}
             title="Edit node"
           >
@@ -197,7 +198,7 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
       {/* Add Child Form */}
       {isAddingChild && (
         <div
-          className="mt-1 mb-2 bg-white border border-gray-200 rounded-md p-3 shadow-sm"
+          className="mt-1 mb-2 bg-white dark:bg-gray-900 border border-gray-200 rounded-md p-3 shadow-sm"
           style={{ marginLeft: `${20 + indentLevel}px` }}
         >
           <form onSubmit={handleAddChild} className="space-y-2">
@@ -218,17 +219,21 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
                   setIsAddingChild(false);
                   setNewChildName("");
                 }}
-                className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-3 py-1 text-sm text-gray-600 dark:text-gray-200 cursor-pointer hover:text-gray-800 transition-colors"
                 disabled={isLoading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="px-4 py-1 text-sm bg-blue-900 dark:bg-blue-800 cursor-pointer text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
                 disabled={isLoading || !newChildName.trim()}
               >
-                {isLoading ? "Adding..." : "Add"}
+                {isLoading ? (
+                  <Loader2 className="animate-spin w-4 h-4" />
+                ) : (
+                  "Add"
+                )}
               </button>
             </div>
           </form>

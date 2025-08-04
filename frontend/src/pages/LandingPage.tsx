@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import type { TreeNode } from "../types";
 import { apiService } from "../services/apiService";
 import TreeNodeComponent from "../components/TreeNodeComponent";
+import DarkModeToggler from "../components/DarkModeToggler";
 
 const LandingPage: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
@@ -33,7 +34,7 @@ const LandingPage: React.FC = () => {
   const handleAddChild = async (parentId: string, name: string) => {
     try {
       await apiService.createNode({ name, parentId });
-      toast.success("Child node added")
+      toast.success("Child node added");
       await loadTreeData();
     } catch (error) {
       console.error("Failed to add child:", error);
@@ -98,7 +99,7 @@ const LandingPage: React.FC = () => {
     }
 
     return (
-      <div className="bg-white rounded-lg">
+      <div className="rounded-lg bg-white dark:bg-gray-950">
         {treeData.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center border border-gray-200 rounded-md">
             <div className="text-gray-400 mb-4">
@@ -116,15 +117,15 @@ const LandingPage: React.FC = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-300 mb-2">
               No nodes yet
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 dark:text-gray-200 mb-6">
               Create your first root node to get started!
             </p>
             <button
               onClick={() => setIsAddingRoot(true)}
-              className="inline-flex items-center cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center cursor-pointer px-4 py-2 bg-blue-900 dark:bg-blue-800 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Root Node
@@ -148,18 +149,19 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="bg-white dark:bg-gray-950 border-b border-gray-200">
+        <div className="max-w-5xl flex justify-around mx-auto px-4 py-6">
+          <div className="">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-2">
               Node Tree Manager
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-100">
               Manage your hierarchical data structure with ease
             </p>
           </div>
+          <DarkModeToggler />
         </div>
       </div>
 
@@ -170,7 +172,7 @@ const LandingPage: React.FC = () => {
           <div className="mb-6">
             <button
               onClick={() => setIsAddingRoot(true)}
-              className="inline-flex cursor-pointer items-center px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
+              className="inline-flex cursor-pointer items-center px-4 py-2 bg-blue-900 dark:bg-blue-800 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
               disabled={isLoading}
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -181,12 +183,12 @@ const LandingPage: React.FC = () => {
 
         {/* Add Root Form */}
         {isAddingRoot && (
-          <div className="mb-6 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="mb-6 bg-white dark:bg-gray-950 border border-gray-200 rounded-lg p-4 shadow-sm">
             <form onSubmit={handleAddRoot} className="space-y-4">
               <div>
                 <label
                   htmlFor="rootName"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
                 >
                   Root Node Name
                 </label>
@@ -196,7 +198,7 @@ const LandingPage: React.FC = () => {
                   value={newRootName}
                   onChange={(e) => setNewRootName(e.target.value)}
                   placeholder="Enter root node name"
-                  className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-50 rounded-md focus:outline-none focus:border-blue-500 dark:bg-gray-800 focus:ring-1 focus:ring-blue-500"
                   maxLength={100}
                   disabled={isLoading}
                   autoFocus
@@ -208,7 +210,11 @@ const LandingPage: React.FC = () => {
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
                   disabled={isLoading || !newRootName.trim()}
                 >
-                  {isLoading ? "Adding..." : "Add Root Node"}
+                  {isLoading ? (
+                    <Loader className="animate-spin w-4 h-4" />
+                  ) : (
+                    "Add Root Node"
+                  )}
                 </button>
                 <button
                   type="button"
@@ -216,7 +222,7 @@ const LandingPage: React.FC = () => {
                     setIsAddingRoot(false);
                     setNewRootName("");
                   }}
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 text-gray-600 dark:text-gray-100 border border-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                   disabled={isLoading}
                 >
                   Cancel
@@ -226,7 +232,6 @@ const LandingPage: React.FC = () => {
           </div>
         )}
 
-  
         {renderContent()}
       </div>
     </div>
