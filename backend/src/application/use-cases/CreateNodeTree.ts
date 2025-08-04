@@ -39,7 +39,7 @@ export class CreateNodeTree {
     const savedNode = await this.nodeTreeRepository.createNode(name, parentId);
 
     if (parentId) {
-      await this.nodeTreeRepository.findByParentIdAndUpdate(
+      await this.nodeTreeRepository.findByParentIdAndAddChild(
         parentId,
         savedNode._id
       );

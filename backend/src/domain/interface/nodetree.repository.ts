@@ -5,5 +5,10 @@ export interface INodeTreeRepository {
   getAllNodes(): Promise<INode[]>;
   getNodeById(id: string): Promise<INode | null>;
   findNodeByName(name: string): Promise<INode | null>;
-  findByParentIdAndUpdate(parentId: string, savedNodeId: string): Promise<void>;
+  findByParentIdAndAddChild(
+    parentId: string,
+    savedNodeId: string
+  ): Promise<void>;
+  deleteNode(id: string): Promise<void>;
+  findByParentIdAndRemoveChild(id: string, nodeId: string): Promise<void>;
 }

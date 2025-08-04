@@ -24,7 +24,7 @@ export class DBNodeTreeRepository implements INodeTreeRepository {
     return NodeModel.findOne({ name });
   }
 
-  async findByParentIdAndUpdate(
+  async findByParentIdAndAddChild(
     parentId: string,
     savedNodeId: string
   ): Promise<void> {
@@ -33,5 +33,18 @@ export class DBNodeTreeRepository implements INodeTreeRepository {
       { $push: { children: savedNodeId } },
       { new: true }
     );
+  }
+
+  async findByParentIdAndRemoveChild(
+    parentId: string,
+    nodeId: string
+  ): Promise<void> {
+    await NodeModel.findByIdAndUpdate(parentId, {
+      $pull: { children: nodeId },
+    });
+  }
+
+  async deleteNode(id: string): Promise<void> {
+    await NodeModel.findByIdAndDelete(id);
   }
 }
