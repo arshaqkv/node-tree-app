@@ -46,14 +46,14 @@ class ApiService {
   }
 
   // Create a new node
-  async createNode(nodeData: CreateNodeRequest): Promise<string> {
+  async createNode(nodeData: CreateNodeRequest): Promise<any> {
     const response = await this.request<TreeNode>({
       url: "/",
       method: "POST",
       data: nodeData,
     });
-    if (!response.message) throw new Error("No data received from server");
-
+    if (!response) throw new Error("No data received from server");
+    
     return response.message;
   }
 

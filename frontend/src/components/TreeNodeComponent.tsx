@@ -27,8 +27,6 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
   const [isAddingChild, setIsAddingChild] = useState(false);
   const [newChildName, setNewChildName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState(node.name);
 
   const hasChildren = node.children && node.children.length > 0;
   const indentLevel = level * 20;
@@ -64,30 +62,6 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
     } catch (error) {
       console.error("Failed to delete node:", error);
       toast.error("Failed to delete node");
-      setIsLoading(false);
-    }
-  };
-
-  const handleEdit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editName.trim() || editName.trim() === node.name) {
-      setIsEditing(false);
-      setEditName(node.name);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      // Add edit functionality to your API service
-      // await apiService.updateNode(node._id, { name: editName.trim() });
-      setIsEditing(false);
-      // For now, just cancel editing since we don't have update API
-      setEditName(node.name);
-    } catch (error) {
-      console.error("Failed to update node:", error);
-      alert("Failed to update node. Please try again.");
-      setEditName(node.name);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -132,35 +106,11 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
 
         {/* Node Name / Edit Input */}
         <div className="flex-1 flex items-center min-w-0">
-          {isEditing ? (
-            <form onSubmit={handleEdit} className="flex-1">
-              <input
-                type="text"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                maxLength={100}
-                disabled={isLoading}
-                autoFocus
-                onBlur={handleEdit}
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") {
-                    setIsEditing(false);
-                    setEditName(node.name);
-                  }
-                }}
-              />
-            </form>
-          ) : (
-            <span
-              className="text-gray-800 dark:text-gray-200 text-sm font-medium truncate cursor-pointer"
-              onClick={() => setIsEditing(true)}
-            >
-              {node.name}
-            </span>
-          )}
+          <span className="text-gray-800 dark:text-gray-200 text-sm font-medium truncate cursor-pointer">
+            {node.name}
+          </span>
+
           <button
-            onClick={() => setIsEditing(true)}
             className="p-1 text-gray-500 opacity-0 group-hover:opacity-100 dark:text-gray-100 cursor-pointer hover:text-gray-700  rounded transition-colors"
             disabled={isLoading}
             title="Edit node"
@@ -171,27 +121,25 @@ const TreeNodeComponent: React.FC<TreeNodeComponentProps> = ({
 
         {/* Action Buttons - Show on Hover */}
         <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          {!isEditing && (
-            <>
-              <button
-                onClick={() => setIsAddingChild(true)}
-                className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors cursor-pointer"
-                disabled={isLoading}
-                title="Add child node"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+          <>
+            <button
+              onClick={() => setIsAddingChild(true)}
+              className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors cursor-pointer"
+              disabled={isLoading}
+              title="Add child node"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
 
-              <button
-                onClick={handleDelete}
-                className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors cursor-pointer"
-                disabled={isLoading}
-                title="Delete node"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </>
-          )}
+            <button
+              onClick={handleDelete}
+              className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors cursor-pointer"
+              disabled={isLoading}
+              title="Delete node"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </>
         </div>
       </div>
 
