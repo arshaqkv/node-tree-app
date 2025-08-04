@@ -1,10 +1,13 @@
+import { Toaster } from "react-hot-toast";
+import LandingPage from "./pages/LandingPage";
 
 const App = () => {
   return (
-    <div className="text-8xl">
-      Hello world
+    <div>
+      <Toaster />
+      <LandingPage />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
