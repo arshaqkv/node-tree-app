@@ -11,4 +11,5 @@ export interface INodeTreeRepository {
   ): Promise<void>;
   deleteNode(id: string): Promise<void>;
   findByParentIdAndRemoveChild(id: string, nodeId: string): Promise<void>;
+  findNodesByParent(parentId: string | null): Promise<INode[]>;
 }

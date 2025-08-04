@@ -47,4 +47,8 @@ export class DBNodeTreeRepository implements INodeTreeRepository {
   async deleteNode(id: string): Promise<void> {
     await NodeModel.findByIdAndDelete(id);
   }
+
+  async findNodesByParent(parentId: string | null): Promise<INode[]> {
+    return await NodeModel.find({ parentId }).sort({ createdAt: 1 });
+  }
 }
