@@ -15,6 +15,16 @@ class NodeController {
       next(error);
     }
   }
+
+  async deleteNode(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    try {
+      await NodeTreeDIContainer.getDeleteNodeTreeUseCase().execute(id);
+      res.status(HttpStatus.OK).json({ message: "Node deleted" });
+    } catch (error: any) {
+      next(error);
+    }
+  }
 }
 
 export const nodeController = new NodeController();
